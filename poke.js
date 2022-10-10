@@ -14,7 +14,7 @@ let offset = 1;
 
 primero.addEventListener("click",()=>{
     if(offset = 1){
-        removeChildNodes(pokemonContainer);
+      removeChildNodes(pokemonContainer);
     fetchPokemons(offset, limit);
     }
 } )
@@ -99,9 +99,6 @@ function createPokemon(pokemon) {
 
   type.textContent = `Tipo : ${pokemon.types[0].type.name}`;
 
-
-
-
   card.appendChild(spriteContainer);
   card.appendChild(number);
   card.appendChild(name);
@@ -120,7 +117,6 @@ function createPokemon(pokemon) {
   button.classList.add("button");
   button.type = "button";
   button.innerText = "Ver más";
-  
   cardBack.appendChild(button);
 
 
@@ -136,7 +132,6 @@ function searchPokemon(event) {
   fetch(`https://pokeapi.co/api/v2/pokemon/${value.toLowerCase()}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log(data)
       buscarPokemon(data);
       spinner.style.display = "none";
     });
@@ -242,14 +237,8 @@ function progressBars(stats) {
 
   return statsContainer;
 }
-function fetchPokemon(id) {
-  fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
-    .then((res) => res.json())
-    .then((data) => {
-      createPokemon(data);
-      spinner.style.display = "none";
-    });
-}
+
+
 
 
 
@@ -266,4 +255,7 @@ return fetchPokemons(offset, limit);
 }
 
 fetchPokemons(offset, limit);
+
+
+
 

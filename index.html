@@ -13,23 +13,27 @@
 
 </head>
 <body>
-    <h1 class="titulo">Pokemon</h1>
+  <div id="logo">
+    <a href="" onclick="fetchPokemons()"><img src="./fondos/logo.png"></a>
+  </div>
     
-
-  
     <div class="centrar" >
       <form action="" onsubmit="searchPokemon(event)">
         <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" id="txt_pokemon" name="pokemon" autocomplete="off" placeholder="Ingrese Pokemon"required>
     </form>
     </div>
+
+  
+    
     
 
 
 
     <div class="pokemon-container">
 
-
+      
     </div>
+    
     <nav class="pagination" aria-label="Page navigation example">
         <ul class="pagination justify-content-center" >
           <li id="previous" class="page-item">
