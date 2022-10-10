@@ -10,6 +10,8 @@ const next = document.querySelector("#next");
 let limit = 5;
 let offset = 1;
 
+
+
 primero.addEventListener("click",()=>{
     if(offset = 1){
         removeChildNodes(pokemonContainer);
@@ -18,14 +20,14 @@ primero.addEventListener("click",()=>{
 } )
 
 segundo.addEventListener("click",()=>{
-    if(offset = 12){
+    if(offset = 7){
     removeChildNodes(pokemonContainer);
     fetchPokemons(offset, limit);
     }
 } )
 
 tercero.addEventListener("click",()=>{
-    if(offset = 24){
+    if(offset = 13){
     removeChildNodes(pokemonContainer);
     fetchPokemons(offset, limit);
     }
@@ -33,14 +35,14 @@ tercero.addEventListener("click",()=>{
 
 previous.addEventListener("click", () => {
   if (offset != 1) {
-    offset -= 12;
+    offset -= 6;
     removeChildNodes(pokemonContainer);
     fetchPokemons(offset, limit);
   }
 });
 
 next.addEventListener("click", () => {
-  offset += 12;
+  offset += 6;
   removeChildNodes(pokemonContainer);
   fetchPokemons(offset, limit);
 });
@@ -53,6 +55,8 @@ function fetchPokemon(id) {
       spinner.style.display = "none";
     });
 }
+
+
 
 function fetchPokemons(offset, limit) {
   spinner.style.display = "block";
@@ -78,6 +82,8 @@ function createPokemon(pokemon) {
 
   const sprite = document.createElement("img");
   sprite.src = pokemon.sprites.other.dream_world.front_default;
+  sprite.style.width="200px";
+  sprite.style.height="200px";
 
   spriteContainer.appendChild(sprite);
 
@@ -88,9 +94,21 @@ function createPokemon(pokemon) {
   name.classList.add("name");
   name.textContent = pokemon.name;
 
+  const type = document.createElement("p")
+  type.classList.add("type");
+
+  type.textContent = `Tipo : ${pokemon.types[0].type.name}`;
+
+
+
+
   card.appendChild(spriteContainer);
   card.appendChild(number);
   card.appendChild(name);
+
+  card.appendChild(type);
+
+
 
   const cardBack = document.createElement("div");
   cardBack.classList.add("pokemon-block-back");
@@ -99,8 +117,87 @@ function createPokemon(pokemon) {
   
   
   const button = document.createElement("button");
+  button.classList.add("button");
   button.type = "button";
-  button.innerText = "Ver mas";
+  button.innerText = "Ver más";
+  
+  cardBack.appendChild(button);
+
+
+  cardContainer.appendChild(card);
+  cardContainer.appendChild(cardBack);
+  pokemonContainer.appendChild(flipCard);
+}
+
+function searchPokemon(event) {
+  removeChildNodes(pokemonContainer);
+  event.preventDefault();
+  const { value } = event.target.pokemon;
+  fetch(`https://pokeapi.co/api/v2/pokemon/${value.toLowerCase()}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+      buscarPokemon(data);
+      spinner.style.display = "none";
+    });
+}
+
+function buscarPokemon(data) {
+  const flipCard = document.createElement("div");
+  flipCard.classList.add("flip-card");
+
+  const cardContainer = document.createElement("div");
+  cardContainer.classList.add("card-container");
+
+  flipCard.appendChild(cardContainer);
+
+  const card = document.createElement("div");
+  card.classList.add("pokemon-block");
+
+  const spriteContainer = document.createElement("div");
+  spriteContainer.classList.add("img-container");
+
+  const sprite = document.createElement("img");
+  sprite.src = data.sprites.other.dream_world.front_default;
+  sprite.style.width="200px";
+  sprite.style.height="200px";
+
+  spriteContainer.appendChild(sprite);
+
+  const number = document.createElement("p");
+  number.textContent = `#${data.id.toString().padStart(3, 0)}`;
+
+  const name = document.createElement("p");
+  name.classList.add("name");
+  name.textContent = data.name;
+
+  const type = document.createElement("p")
+  type.classList.add("type");
+
+  type.textContent = `Tipo : ${data.types[0].type.name}`;
+
+
+
+
+  card.appendChild(spriteContainer);
+  card.appendChild(number);
+  card.appendChild(name);
+
+  card.appendChild(type);
+
+
+
+  const cardBack = document.createElement("div");
+  cardBack.classList.add("pokemon-block-back");
+
+  cardBack.appendChild(progressBars(data.stats));
+  
+  
+  const button = document.createElement("button");
+  button.classList.add("button");
+  button.type = "button";
+  button.innerText = "Ver más";
+  
   cardBack.appendChild(button);
 
 
@@ -113,7 +210,7 @@ function progressBars(stats) {
   const statsContainer = document.createElement("div");
   statsContainer.classList.add("stats-container");
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 6; i++) {
     const stat = stats[i];
 
     const statPercent = stat.base_stat / 2 + "%";
@@ -145,6 +242,14 @@ function progressBars(stats) {
 
   return statsContainer;
 }
+function fetchPokemon(id) {
+  fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`)
+    .then((res) => res.json())
+    .then((data) => {
+      createPokemon(data);
+      spinner.style.display = "none";
+    });
+}
 
 
 
@@ -153,5 +258,12 @@ function removeChildNodes(parent) {
     parent.removeChild(parent.firstChild);
   }
 }
+function validar() {
+  if ($('#txt_pokemon').val().length == 0) {
+  alert('Ingrese un dato');
+return fetchPokemons(offset, limit);
+}
+}
 
 fetchPokemons(offset, limit);
+
